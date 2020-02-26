@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Locator</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        #map {
+            width: 640px;
+            margin: 0 auto;
+            height: 480px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1> Store Locator </h1>
+    <form action="http://localhost:5000/web-app-3d24a/us-central1/api/uploadImage" method="POST">
+        <input type="file" >
+        <input type="submit">
+    </form>
+    <br>
+    <br>
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
+        type="text/css" />
+    <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+    <div id="map">
+
+    </div>
+    <script>
+        mapboxgl.accessToken = "pk.eyJ1IjoidGVjaDE4IiwiYSI6ImNrNjNuNHFnbjA3ZWczcG1wbjhtNjRib3cifQ.rotLOBIUUeo5wcjFokXU5w";
+        let map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://style/mapbox/streets-v11',
+            center: [0, 0],
+            zoom: 6
+        });
+        map.addControl(new mapboxgl.GeolocateControl({
+            positionOptions: { enableHighAccuracy: true },
+            showUserLocation: true
+        }))
+        var marker = new mapboxgl.Marker({
+            draggable: true
+        })
+            .setLngLat([0, 0])
+            .addTo(map);
+
+        function onDragged() {
+            let lnglat = marker.getLngLat();
+            console.log(lnglat);
+        }
+        marker.on('dragend', onDragged);
+        map.on('click', (e) => {
+            // console.log(e.lngLat);
+            marker.setLngLat(e.lngLat);
+        })
+    </script>
+</body>
+
+</html>
